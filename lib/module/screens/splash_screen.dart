@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tour/main.dart';
+import 'package:tour/module/screens/menu.dart';
 
 import '../../core/injector.dart';
 
@@ -18,8 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     Timer(
       const Duration(seconds: 5),
-      () => si.routerService
-          .popUntil(context, const MyHomePage(title: 'Tour App')),
+      () => si.routerService.popUntil(context, const Menu()),
     );
     super.initState();
   }
@@ -27,7 +26,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: SizedBox(
           width: double.infinity,
