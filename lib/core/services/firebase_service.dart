@@ -48,7 +48,6 @@ class FirebaseService {
     } on FirebaseException catch (e) {
       document = e.message.toString();
     }
-    print('[addDoc] response $document');
     return document;
   }
 
@@ -105,7 +104,6 @@ class FirebaseService {
     } on FirebaseException catch (e) {
       totalBytes = e.message;
     }
-    print('[savedImage] response $totalBytes');
     return totalBytes;
   }
 

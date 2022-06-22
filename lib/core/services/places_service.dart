@@ -48,7 +48,6 @@ class PlacesService {
     } on SocketException catch (e) {
       response = e.message.toString();
     }
-    print('[addPlace]response $response');
     return response;
   }
 }
