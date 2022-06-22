@@ -1,0 +1,22 @@
+[
+    {
+        "category": "Beach",
+        "image": "https://cdn-icons-png.flaticon.com/512/2934/2934905.png"
+    },
+    {
+        "category": "Camp",
+        "image": "https://cdn-icons-png.flaticon.com/512/1020/1020586.png"
+    },
+    {
+        "category": "Mountain",
+        "image": "https://cdn-icons-png.flaticon.com/512/3337/3337982.png"
+    },
+    {
+        "category": "Restaurant",
+        "image": "https://cdn-icons-png.flaticon.com/512/3170/3170733.png"
+    },
+    {
+        "category": "Forest",
+        "image": "https://cdn-icons-png.flaticon.com/512/2321/2321573.png"
+    }
+]
