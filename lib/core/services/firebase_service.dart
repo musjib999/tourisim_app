@@ -8,20 +8,16 @@ class FirebaseService {
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
   Future getAllDoc(String collection) async {
-    List<QueryDocumentSnapshot<Map<String, dynamic>>>? documets;
+    // List<QueryDocumentSnapshot<Map<String, dynamic>>>? documets;
+    dynamic documents;
     try {
-      await _firestore
-          .collection(collection)
-          .orderBy('name')
-          .get()
-          .then((value) {
-        documets = value.docs;
-      });
-    } catch (e) {
-      documets = [];
-      throw 'Error occured $e';
+      final docs =
+          await _firestore.collection(collection).orderBy('name').get();
+      documents = docs.docs;
+    } on FirebaseException catch (e) {
+      documents = e.message;
     }
-    return documets;
+    return documents;
   }
 
   Future getOneDoc({required String collection, required String id}) async {

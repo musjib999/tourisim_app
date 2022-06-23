@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tour/data/model/category_model.dart';
 import 'package:tour/data/source/json_file.dart';
@@ -20,5 +22,29 @@ class UtilityService {
       categoryList.add(categoryModel);
     }
     return categoryList;
+  }
+
+  CachedNetworkImage getCachedNetworkImage(String url) {
+    return CachedNetworkImage(
+      imageUrl: url,
+      imageBuilder: (context, image) {
+        return Container(
+          width: 240,
+          height: 120,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: image,
+              fit: BoxFit.fill,
+            ),
+          ),
+        );
+      },
+      placeholder: (context, image) => Image.asset(
+        'assets/images/placeholder.png',
+        fit: BoxFit.fill,
+        width: 240,
+        height: 120,
+      ),
+    );
   }
 }
