@@ -1,5 +1,8 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tour/data/model/place_model.dart';
+
 import '../injector.dart';
 
 class PlacesService {
@@ -49,5 +52,19 @@ class PlacesService {
       response = e.message.toString();
     }
     return response;
+  }
+
+  //fetch
+  Future<List<PlaceModel>> getAllPlaces() async {
+    List<PlaceModel> placesList = [];
+    final places = await si.firebaseService.getAllDoc('places');
+    if (places.runtimeType == String) {
+    } else {
+      for (final place
+          in places as List<QueryDocumentSnapshot<Map<String, dynamic>>>) {
+        placesList.add(PlaceModel.fromJson(place.data()));
+      }
+    }
+    return placesList;
   }
 }
