@@ -8,10 +8,8 @@ Future<dynamic> postRequest({
   try {
     Response response = await Dio().post(url, data: formData);
     response = response;
-    print(response.data);
   } on DioError catch (e) {
     response = e.message;
-    print(e.message);
   }
   return response;
 }

@@ -10,12 +10,13 @@ class PlacesService {
     required String uuid,
     required String imagePath,
     required String name,
-    location,
+    required String location,
+    String description = '',
   }) async {
     dynamic response;
     try {
       await si.firebaseService
-          .savedImage(path: '/places/$uuid.png', file: File(imagePath))
+          .savedImage(path: '/places/$uuid/$uuid.png', file: File(imagePath))
           .then(
         (value) async {
           if (value.runtimeType == String) {
@@ -25,17 +26,23 @@ class PlacesService {
             if (bytes < 1) {
               response = 'Error while uploading image';
             } else {
-              String? imageUrl =
-                  await si.firebaseService.getImageUrl('/places/$uuid.png');
+              String? imageUrl = await si.firebaseService
+                  .getImageUrl('/places/$uuid/$uuid.png');
               await si.firebaseService
                   .addDoc(
-                      collection: 'places',
-                      data: {
-                        'location': location,
-                        'name': name,
-                        'image': imageUrl
-                      },
-                      id: uuid)
+                collection: 'places',
+                data: {
+                  'location': location,
+                  'name': name,
+                  'image': imageUrl,
+                  // 'position': {
+                  //   'longitude': currentLocation.longitude,
+                  //   'latitude': currentLocation.latitude,
+                  // },
+                  'description': description,
+                },
+                id: uuid,
+              )
                   .then((value) {
                 if (value.runtimeType == String) {
                   response = value;

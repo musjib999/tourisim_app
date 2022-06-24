@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:tour/core/injector.dart';
 import 'package:tour/data/source/api.dart';
 import 'package:tour/firebase_options.dart';
@@ -172,7 +173,9 @@ class _MyHomePageState extends State<MyHomePage> {
               color: AppColors.primaryColor,
               onPressed: imagePath == ''
                   ? () async {
-                      await si.utilityService.snapPicture().then((value) {
+                      await si.utilityService
+                          .snapPicture(ImageSource.camera)
+                          .then((value) {
                         setState(() {
                           imagePath = value;
                         });

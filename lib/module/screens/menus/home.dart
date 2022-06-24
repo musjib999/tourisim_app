@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:tour/data/model/category_model.dart';
 import 'package:tour/data/model/place_model.dart';
+import 'package:tour/module/screens/menus/add_place.dart';
 import 'package:tour/shared/theme/colors.dart';
 
 import '../../../core/injector.dart';
+import '../../../shared/global/global_var.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -16,7 +19,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   List<String> filters = ['All', 'Recommended', 'Popular', 'Ratings', 'States'];
   int selectedItem = 0;
-  String cityAndCountry = 'loading...';
   List<CategoryModel> categories = [];
   @override
   void initState() {
@@ -34,16 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        leading: Container(
-          margin: const EdgeInsets.only(left: 9),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: Colors.grey),
-          ),
-          child: const Center(
-            child: Icon(Ionicons.menu),
-          ),
-        ),
+        leading: const AppBarLeadingButton(icon: Ionicons.menu),
         actions: [
           Container(
             margin: const EdgeInsets.only(right: 9),
@@ -257,6 +250,42 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          String imagePath =
+              await si.utilityService.snapPicture(ImageSource.gallery);
+          si.routerService.nextRoute(
+            context,
+            AddPlace(imagePath: imagePath),
+          );
+        },
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+}
+
+class AppBarLeadingButton extends StatelessWidget {
+  final IconData icon;
+  const AppBarLeadingButton({
+    Key? key,
+    required this.icon,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(left: 9),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(color: Colors.grey),
+      ),
+      child: Center(
+        child: Icon(icon),
       ),
     );
   }
