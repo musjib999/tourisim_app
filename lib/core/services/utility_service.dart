@@ -5,10 +5,12 @@ import 'package:tour/data/model/category_model.dart';
 import 'package:tour/data/source/json_file.dart';
 
 class UtilityService {
-  Future<String> snapPicture() async {
+  Future<String> snapPicture(ImageSource imageSource) async {
     String path = '';
     final ImagePicker _imagePicker = ImagePicker();
-    await _imagePicker.pickImage(source: ImageSource.camera).then((value) {
+    await _imagePicker
+        .pickImage(source: imageSource, imageQuality: 75)
+        .then((value) {
       path = value!.path;
     });
     return path;
