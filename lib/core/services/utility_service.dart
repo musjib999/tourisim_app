@@ -26,17 +26,18 @@ class UtilityService {
     return categoryList;
   }
 
-  CachedNetworkImage getCachedNetworkImage(String url) {
+  CachedNetworkImage getCachedNetworkImage(
+      {required String url, double? height, double? width}) {
     return CachedNetworkImage(
       imageUrl: url,
       imageBuilder: (context, image) {
         return Container(
-          width: 240,
-          height: 120,
+          width: width ?? 250,
+          height: height ?? 140,
           decoration: BoxDecoration(
             image: DecorationImage(
               image: image,
-              fit: BoxFit.fill,
+              fit: BoxFit.cover,
             ),
           ),
         );

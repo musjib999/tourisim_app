@@ -148,10 +148,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         )
                       : SizedBox(
-                          height: 210.0,
+                          height: 225.0,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
-                            itemCount: places.length,
+                            itemCount: places.length > 5 ? 5 : places.length,
                             itemBuilder: (context, index) {
                               return GestureDetector(
                                 child: Container(
@@ -170,7 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             BorderRadius.circular(20.0),
                                         child: si.utilityService
                                             .getCachedNetworkImage(
-                                          places[index].image,
+                                          url: places[index].image,
                                         ),
                                       ),
                                       const SizedBox(height: 10),
