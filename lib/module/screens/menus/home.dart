@@ -4,10 +4,12 @@ import 'package:ionicons/ionicons.dart';
 import 'package:tour/data/model/category_model.dart';
 import 'package:tour/data/model/place_model.dart';
 import 'package:tour/module/screens/menus/add_place.dart';
+import 'package:tour/module/screens/menus/single_place.dart';
 import 'package:tour/shared/theme/colors.dart';
 
 import '../../../core/injector.dart';
 import '../../../shared/global/global_var.dart';
+import '../../../shared/widgets/cards/app_bar_leading_icon.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -151,9 +153,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           height: 225.0,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
-                            itemCount: places.length > 5 ? 5 : places.length,
+                            itemCount: places.length > 4 ? 4 : places.length,
                             itemBuilder: (context, index) {
                               return GestureDetector(
+                                onTap: () => si.routerService.nextRoute(
+                                  context,
+                                  SinglePlace(place: places[index]),
+                                ),
                                 child: Container(
                                   margin: const EdgeInsets.only(left: 8.0),
                                   padding: const EdgeInsets.all(12),
@@ -264,28 +270,6 @@ class _HomeScreenState extends State<HomeScreen> {
           Icons.add,
           color: Colors.white,
         ),
-      ),
-    );
-  }
-}
-
-class AppBarLeadingButton extends StatelessWidget {
-  final IconData icon;
-  const AppBarLeadingButton({
-    Key? key,
-    required this.icon,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(left: 9),
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: Border.all(color: Colors.grey),
-      ),
-      child: Center(
-        child: Icon(icon),
       ),
     );
   }

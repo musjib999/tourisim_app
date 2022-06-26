@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:tour/module/screens/menus/single_place.dart';
 import 'package:tour/shared/global/global_var.dart';
 
 import '../../../core/injector.dart';
@@ -13,12 +14,6 @@ class FavouritePlaces extends StatefulWidget {
 }
 
 class _FavouritePlacesState extends State<FavouritePlaces> {
-  @override
-  void initState() {
-    super.initState();
-    print(favouritePlaces.places);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,6 +28,11 @@ class _FavouritePlacesState extends State<FavouritePlaces> {
             itemCount: favouritePlaces.places.length,
             itemBuilder: (context, index) {
               return GestureDetector(
+                onTap: () => si.routerService.nextRoute(
+                    context,
+                    SinglePlace(
+                      place: favouritePlaces.places[index],
+                    )),
                 child: Container(
                   margin: const EdgeInsets.only(bottom: 15.0),
                   padding: const EdgeInsets.all(12),

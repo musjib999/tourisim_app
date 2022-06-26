@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:tour/core/injector.dart';
 import 'package:tour/shared/global/global_var.dart';
-import 'package:tour/shared/widgets/primary_button.dart';
+import 'package:tour/shared/widgets/buttons/primary_button.dart';
 import 'package:uuid/uuid.dart';
 
 class AddPlace extends StatefulWidget {

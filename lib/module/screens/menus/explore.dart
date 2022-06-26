@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:tour/module/screens/menus/single_place.dart';
 
 import '../../../core/injector.dart';
 import '../../../data/model/place_model.dart';
@@ -56,6 +57,10 @@ class _ExploreState extends State<Explore> {
                         itemCount: places.length,
                         itemBuilder: (context, index) {
                           return GestureDetector(
+                            onTap: () => si.routerService.nextRoute(
+                              context,
+                              SinglePlace(place: places[index]),
+                            ),
                             child: Container(
                               margin: const EdgeInsets.only(
                                   left: 8.0, bottom: 15.0),
