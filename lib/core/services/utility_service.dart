@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tour/data/model/category_model.dart';
 import 'package:tour/data/source/json_file.dart';
@@ -47,6 +47,14 @@ class UtilityService {
         fit: BoxFit.fill,
         width: 240,
         height: 120,
+      ),
+    );
+  }
+
+  void showSnackBar({required BuildContext context, required String body}) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(body),
       ),
     );
   }
