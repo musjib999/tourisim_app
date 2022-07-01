@@ -4,10 +4,12 @@ class FadedBackgroundContainer extends StatelessWidget {
   final Icon icon;
   final BoxShape? shape;
   final double? size;
+  final Color color;
   const FadedBackgroundContainer({
     Key? key,
     required this.icon,
     this.shape = BoxShape.rectangle,
+    this.color = Colors.white,
     this.size,
   }) : super(key: key);
 
@@ -18,7 +20,7 @@ class FadedBackgroundContainer extends StatelessWidget {
       height: size,
       decoration: BoxDecoration(
         shape: shape as BoxShape,
-        color: Colors.white.withOpacity(0.3),
+        color: color.withOpacity(0.3),
         borderRadius:
             shape == BoxShape.rectangle ? BorderRadius.circular(8.0) : null,
       ),

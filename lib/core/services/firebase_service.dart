@@ -35,7 +35,7 @@ class FirebaseService {
   Future<dynamic> addDoc(
       {required String collection,
       required Map<String, dynamic> data,
-      required String id}) async {
+      String? id}) async {
     dynamic document;
     try {
       await _firestore.collection(collection).doc(id).set(data).then((value) {
@@ -109,5 +109,18 @@ class FirebaseService {
       url = value;
     });
     return url;
+  }
+
+  Stream<QuerySnapshot> getLikesStream(String placeId) {
+    Stream<QuerySnapshot>? snapshot;
+    try {
+      snapshot = _firestore
+          .collection('favourite')
+          .where('id', isEqualTo: placeId)
+          .snapshots();
+    } catch (e) {
+      throw 'Error occured $e';
+    }
+    return snapshot;
   }
 }
