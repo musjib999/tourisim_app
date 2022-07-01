@@ -271,11 +271,65 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          String imagePath =
-              await si.utilityService.snapPicture(ImageSource.gallery);
-          si.routerService.nextRoute(
-            context,
-            AddPlace(imagePath: imagePath),
+          si.utilityService.showBottomSheetDialog(
+            context: context,
+            content: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 50),
+              height: 200,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () async {
+                      String imagePath = await si.utilityService
+                          .snapPicture(ImageSource.camera);
+                      Navigator.pop(context);
+                      si.routerService.nextRoute(
+                        context,
+                        AddPlace(imagePath: imagePath),
+                      );
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(
+                          Ionicons.camera_outline,
+                          size: 80,
+                        ),
+                        SizedBox(height: 8.0),
+                        Text('Camera'),
+                      ],
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 25.0, bottom: 25.0),
+                    child: VerticalDivider(color: Colors.white),
+                  ),
+                  GestureDetector(
+                    onTap: () async {
+                      String imagePath = await si.utilityService
+                          .snapPicture(ImageSource.gallery);
+                      Navigator.pop(context);
+                      si.routerService.nextRoute(
+                        context,
+                        AddPlace(imagePath: imagePath),
+                      );
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(
+                          Icons.image_outlined,
+                          size: 80,
+                        ),
+                        SizedBox(height: 8.0),
+                        Text('Gallary'),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
           );
         },
         child: const Icon(
