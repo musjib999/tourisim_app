@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tour/module/screens/menu.dart';
+import 'package:tour/shared/global/global_var.dart';
 
 import '../../core/injector.dart';
 
@@ -20,6 +21,9 @@ class _SplashScreenState extends State<SplashScreen> {
       const Duration(seconds: 5),
       () => si.routerService.popUntil(context, const Menu()),
     );
+    si.locationService.getCoordinates().then((value) {
+      currentLocation = value;
+    });
     super.initState();
   }
 

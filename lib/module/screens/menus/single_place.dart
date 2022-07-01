@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:tour/core/injector.dart';
 import 'package:tour/data/model/place_model.dart';
+import 'package:tour/module/screens/map/map.dart';
 import 'package:tour/shared/global/global_var.dart';
 import 'package:tour/shared/widgets/buttons/primary_button.dart';
 
@@ -18,12 +20,6 @@ class SinglePlace extends StatefulWidget {
 }
 
 class _SinglePlaceState extends State<SinglePlace> {
-  @override
-  void initState() {
-    super.initState();
-    print(favouritePlaces.places.contains(widget.place));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,32 +101,110 @@ class _SinglePlaceState extends State<SinglePlace> {
                         icon: Icon(
                           Ionicons.heart,
                           color: Colors.red,
-                          size: 35,
+                          size: 25,
                         ),
                         shape: BoxShape.rectangle,
-                        size: 50,
+                        size: 35,
                       ),
                       const SizedBox(width: 8),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Text(
+                        children: [
+                          const Text(
                             'Likes',
                             style: TextStyle(color: Colors.grey, fontSize: 12),
                           ),
-                          Text(
-                            '1,232',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                          StreamBuilder<QuerySnapshot<Object?>>(
+                            stream: si.firebaseService
+                                .getLikesStream(widget.place.id),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Text(
+                                  '0',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                );
+                              }
+                              return Text(
+                                snapshot.data!.docs.length.toString(),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              );
+                            },
                           ),
                         ],
                       )
+                    ],
+                  ),
+                  const SizedBox(height: 15.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          const FadedBackgroundContainer(
+                            icon: Icon(
+                              Ionicons.location_outline,
+                              color: Colors.blue,
+                              size: 25,
+                            ),
+                            shape: BoxShape.rectangle,
+                            size: 35,
+                          ),
+                          const SizedBox(width: 8),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Latitude',
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 12),
+                              ),
+                              Text(
+                                widget.place.position.latitude.toString(),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const FadedBackgroundContainer(
+                            icon: Icon(
+                              Ionicons.location_outline,
+                              color: Colors.blue,
+                              size: 25,
+                            ),
+                            shape: BoxShape.rectangle,
+                            size: 35,
+                          ),
+                          const SizedBox(width: 8),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Longitude',
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 12),
+                              ),
+                              Text(
+                                widget.place.position.longitude.toString(),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
                     ],
                   ),
                   const SizedBox(height: 20),
                   const Text(
                     'Description',
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 16,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -140,12 +214,17 @@ class _SinglePlaceState extends State<SinglePlace> {
                         : widget.place.description,
                     style: const TextStyle(color: Colors.grey, wordSpacing: 2),
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 55),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       PrimaryButton(
-                        onTap: (startLoading, stopLoading, btnState) {},
+                        onTap: (startLoading, stopLoading, btnState) {
+                          si.routerService.nextRoute(
+                            context,
+                            PlaceMap(position: widget.place.position),
+                          );
+                        },
                         buttonTitle: 'Direction',
                       ),
                     ],
@@ -159,3 +238,5 @@ class _SinglePlaceState extends State<SinglePlace> {
     );
   }
 }
+
+//AIzaSyA0L3AtSwIu7EwchANR3EnzRa_UDHAMjpE

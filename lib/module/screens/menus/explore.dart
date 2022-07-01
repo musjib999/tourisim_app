@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:tour/module/screens/menus/single_place.dart';
 
@@ -44,14 +46,22 @@ class _ExploreState extends State<Explore> {
                 }
                 List<PlaceModel>? places = snapshot.data;
                 return places!.isEmpty
-                    ? const Center(
-                        child: Text(
-                          'No Place Added Yet!',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset('assets/svg/empty.svg', width: 180),
+                          const SizedBox(height: 10),
+                          const Center(
+                            child: Text(
+                              'No Place Added Yet!',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       )
                     : ListView.builder(
                         itemCount: places.length,
@@ -110,34 +120,71 @@ class _ExploreState extends State<Explore> {
                                           )
                                         ],
                                       ),
-                                      IconButton(
-                                        onPressed: () {
-                                          if (!favouritePlaces.places
-                                              .contains(places[index])) {
-                                            favouritePlaces.addFavouritePlace(
-                                                places[index]);
-                                            si.utilityService.showSnackBar(
-                                              context: context,
-                                              body: 'Spot Added to Favourite',
-                                            );
-                                          } else {
-                                            favouritePlaces
-                                                .removeFavouritePlace(
-                                                    places[index]);
-                                            si.utilityService.showSnackBar(
-                                              context: context,
-                                              body: 'Spot Removed to Favourite',
+                                      StreamBuilder<QuerySnapshot<Object?>>(
+                                        stream: si.firebaseService
+                                            .getLikesStream(places[index].id),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return Row(
+                                              children: [
+                                                Text(
+                                                  favouritePlaces.places.length
+                                                      .toString(),
+                                                  style: const TextStyle(
+                                                      color: Colors.grey),
+                                                ),
+                                                IconButton(
+                                                  onPressed: () {},
+                                                  icon: favouritePlaces.places
+                                                          .contains(
+                                                              places[index])
+                                                      ? const Icon(
+                                                          Ionicons.heart,
+                                                          color: Colors.red,
+                                                        )
+                                                      : const Icon(Ionicons
+                                                          .heart_outline),
+                                                ),
+                                              ],
                                             );
                                           }
+                                          return Row(
+                                            children: [
+                                              Text(
+                                                '${snapshot.data!.docs.length}',
+                                                style: const TextStyle(
+                                                    color: Colors.grey),
+                                              ),
+                                              IconButton(
+                                                onPressed: () async {
+                                                  await si.placesService
+                                                      .addToFavourite(
+                                                          places[index]
+                                                              .toJson(),
+                                                          context);
+                                                  favouritePlaces
+                                                      .addFavouritePlace(
+                                                          places[index]);
+                                                  si.utilityService
+                                                      .showSnackBar(
+                                                    context: context,
+                                                    body:
+                                                        'Spot Added to Favourite',
+                                                  );
+                                                },
+                                                icon: favouritePlaces.places
+                                                        .contains(places[index])
+                                                    ? const Icon(
+                                                        Ionicons.heart,
+                                                        color: Colors.red,
+                                                      )
+                                                    : const Icon(
+                                                        Ionicons.heart_outline),
+                                              ),
+                                            ],
+                                          );
                                         },
-                                        icon: favouritePlaces.places
-                                                .contains(places[index])
-                                            ? const Icon(
-                                                Ionicons.heart,
-                                                color: Colors.red,
-                                              )
-                                            : const Icon(
-                                                Ionicons.heart_outline),
                                       )
                                     ],
                                   )

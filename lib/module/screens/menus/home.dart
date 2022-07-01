@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:tour/data/model/category_model.dart';
@@ -140,14 +141,25 @@ class _HomeScreenState extends State<HomeScreen> {
                   }
                   List<PlaceModel>? places = snapshot.data;
                   return places!.isEmpty
-                      ? const Center(
-                          child: Text(
-                            'No Place Added Yet!',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              'assets/svg/empty.svg',
+                              width: 120,
                             ),
-                          ),
+                            const SizedBox(height: 10),
+                            const Center(
+                              child: Text(
+                                'No Place Added Yet!',
+                                style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
                         )
                       : SizedBox(
                           height: 225.0,

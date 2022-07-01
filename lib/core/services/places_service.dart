@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:tour/data/model/place_model.dart';
+import 'package:tour/shared/global/global_var.dart';
 
 import '../injector.dart';
 
@@ -11,6 +13,8 @@ class PlacesService {
     required String imagePath,
     required String name,
     required String location,
+    required double lat,
+    required double long,
     String description = '',
   }) async {
     dynamic response;
@@ -35,11 +39,12 @@ class PlacesService {
                   'location': location,
                   'name': name,
                   'image': imageUrl,
-                  // 'position': {
-                  //   'longitude': currentLocation.longitude,
-                  //   'latitude': currentLocation.latitude,
-                  // },
+                  'position': {
+                    'longitude': long,
+                    'latitude': lat,
+                  },
                   'description': description,
+                  'id': uuid,
                 },
                 id: uuid,
               )
@@ -73,5 +78,25 @@ class PlacesService {
       }
     }
     return placesList;
+  }
+
+  //add favourite
+  Future<dynamic> addToFavourite(
+      Map<String, dynamic> data, BuildContext context) async {
+    dynamic hasAdded = false;
+    try {
+      await si.firebaseService.addDoc(collection: 'favourite', data: data);
+      hasAdded = true;
+    } catch (e) {
+      hasAdded = false;
+      favouritePlaces.addFavouritePlace(
+        PlaceModel.fromJson(data),
+      );
+    }
+    return hasAdded;
+  }
+
+  Stream<QuerySnapshot<Object?>> getPlaceLikes() {
+    return si.firebaseService.getDocStream('favourite');
   }
 }
