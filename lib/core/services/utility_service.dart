@@ -58,4 +58,14 @@ class UtilityService {
       ),
     );
   }
+
+  void showBottomSheetDialog(
+      {required BuildContext context, required Widget content}) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return content;
+      },
+    );
+  }
 }
