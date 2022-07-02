@@ -8,20 +8,16 @@ class FirebaseService {
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
   Future getAllDoc(String collection) async {
-    List<QueryDocumentSnapshot<Map<String, dynamic>>>? documets;
+    // List<QueryDocumentSnapshot<Map<String, dynamic>>>? documets;
+    dynamic documents;
     try {
-      await _firestore
-          .collection(collection)
-          .orderBy('name')
-          .get()
-          .then((value) {
-        documets = value.docs;
-      });
-    } catch (e) {
-      documets = [];
-      throw 'Error occured $e';
+      final docs =
+          await _firestore.collection(collection).orderBy('name').get();
+      documents = docs.docs;
+    } on FirebaseException catch (e) {
+      documents = e.message;
     }
-    return documets;
+    return documents;
   }
 
   Future getOneDoc({required String collection, required String id}) async {
@@ -39,7 +35,7 @@ class FirebaseService {
   Future<dynamic> addDoc(
       {required String collection,
       required Map<String, dynamic> data,
-      required String id}) async {
+      String? id}) async {
     dynamic document;
     try {
       await _firestore.collection(collection).doc(id).set(data).then((value) {
@@ -48,7 +44,6 @@ class FirebaseService {
     } on FirebaseException catch (e) {
       document = e.message.toString();
     }
-    print('[addDoc] response $document');
     return document;
   }
 
@@ -105,7 +100,6 @@ class FirebaseService {
     } on FirebaseException catch (e) {
       totalBytes = e.message;
     }
-    print('[savedImage] response $totalBytes');
     return totalBytes;
   }
 
@@ -115,5 +109,18 @@ class FirebaseService {
       url = value;
     });
     return url;
+  }
+
+  Stream<QuerySnapshot> getLikesStream(String placeId) {
+    Stream<QuerySnapshot>? snapshot;
+    try {
+      snapshot = _firestore
+          .collection('favourite')
+          .where('id', isEqualTo: placeId)
+          .snapshots();
+    } catch (e) {
+      throw 'Error occured $e';
+    }
+    return snapshot;
   }
 }

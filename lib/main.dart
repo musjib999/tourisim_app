@@ -1,14 +1,21 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:tour/core/injector.dart';
+import 'package:tour/data/source/api.dart';
 import 'package:tour/firebase_options.dart';
 import 'package:tour/module/screens/splash_screen.dart';
 import 'package:tour/shared/theme/colors.dart';
-import 'package:uuid/uuid.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -21,19 +28,23 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
-  void initState() {
-    super.initState();
-    Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Tour App',
-      theme: ThemeData(
-        primaryColor: AppColors.primaryColor,
+      darkTheme: ThemeData.dark().copyWith(
+        scaffoldBackgroundColor: AppColors.primaryColor,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: AppColors.primaryColor,
+        ),
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          backgroundColor: AppColors.secondaryColor,
+        ),
+        navigationBarTheme: NavigationBarThemeData(
+          indicatorColor: AppColors.secondaryColor,
+          labelTextStyle: MaterialStateProperty.all(
+            const TextStyle(color: AppColors.secondaryColor),
+          ),
+        ),
       ),
       home: const SplashScreen(),
     );
@@ -158,7 +169,9 @@ class _MyHomePageState extends State<MyHomePage> {
               color: AppColors.primaryColor,
               onPressed: imagePath == ''
                   ? () async {
-                      await si.utilityService.snapPicture().then((value) {
+                      await si.utilityService
+                          .snapPicture(ImageSource.camera)
+                          .then((value) {
                         setState(() {
                           imagePath = value;
                         });
@@ -170,40 +183,73 @@ class _MyHomePageState extends State<MyHomePage> {
                           setState(() {
                             isLoading = true;
                           });
-                          const uuid = Uuid();
 
-                          String uid = uuid.v4().split('-').join();
-                          await si.placesService
-                              .addPlace(
-                            uuid: uid,
-                            imagePath: imagePath,
-                            name: name.text,
-                            location: cityAndCountry,
-                          )
-                              .then((value) {
-                            if (value.runtimeType == String) {
-                              setState(() {
-                                isLoading = false;
-                              });
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(value),
-                                ),
-                              );
-                            } else {
-                              setState(() {
-                                isLoading = false;
-                                imagePath = '';
-                              });
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content:
-                                      Text('Place has been added successfully'),
-                                ),
-                              );
-                            }
+                          await postRequest(
+                            url:
+                                'https://187d-102-91-4-73.ngrok.io/tour-dbbd4/us-central1/uploadPlace',
+                            formData: FormData.fromMap({
+                              'meta': jsonEncode({
+                                "name": name.text,
+                                "description": description.text,
+                                "state": cityAndCountry,
+                                "position": {
+                                  "longitude": 7.083874,
+                                  "latitude": 10.93847
+                                },
+                              }),
+                              'image': await MultipartFile.fromFile(imagePath),
+                            }),
+                          );
+
+                          setState(() {
+                            isLoading = false;
                           });
+                          // const uuid = Uuid();
+
+                          // String uid = uuid.v4().split('-').join();
+                          // await si.placesService
+                          //     .addPlace(
+                          //   uuid: uid,
+                          //   imagePath: imagePath,
+                          //   name: name.text,
+                          //   location: cityAndCountry,
+                          // )
+                          //     .then((value) {
+                          //   if (value.runtimeType == String) {
+                          //     setState(() {
+                          //       isLoading = false;
+                          //     });
+                          //     ScaffoldMessenger.of(context).showSnackBar(
+                          //       SnackBar(
+                          //         content: Text(value),
+                          //       ),
+                          //     );
+                          //   } else {
+                          //     setState(() {
+                          //       isLoading = false;
+                          //       imagePath = '';
+                          //     });
+                          //     ScaffoldMessenger.of(context).showSnackBar(
+                          //       const SnackBar(
+                          //         content:
+                          //             Text('Place has been added successfully'),
+                          //       ),
+                          //     );
+                          //   }
+                          // });
                         },
+            ),
+            MaterialButton(
+              child: const Text(
+                'Stop',
+                style: TextStyle(color: Colors.white),
+              ),
+              color: Colors.red,
+              onPressed: () {
+                setState(() {
+                  isLoading = false;
+                });
+              },
             ),
           ],
         ),
