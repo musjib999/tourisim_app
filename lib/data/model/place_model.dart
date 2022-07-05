@@ -7,6 +7,7 @@ class PlaceModel {
     required this.name,
     required this.image,
     required this.description,
+    required this.category,
     required this.position,
   });
 
@@ -14,7 +15,7 @@ class PlaceModel {
   final String location;
   final String name;
   final String image;
-  final String description;
+  final String description, category;
   final LocationModel position;
 
   factory PlaceModel.fromJson(Map<String, dynamic> json) => PlaceModel(
@@ -22,6 +23,7 @@ class PlaceModel {
         location: json["location"],
         name: json["name"],
         image: json["image"],
+        category: json["category"],
         description: json["description"],
         position: LocationModel.fromJson(json['position']),
       );
@@ -30,6 +32,7 @@ class PlaceModel {
         "location": location,
         "name": name,
         "image": image,
+        "category": category,
         "description": description,
         "id": id,
         "position": position.toJson()

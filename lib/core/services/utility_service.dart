@@ -26,6 +26,19 @@ class UtilityService {
     return categoryList;
   }
 
+  List<DropdownMenuItem> getDropdownItems(List items) {
+    List<DropdownMenuItem<dynamic>> dropdownItems = [];
+
+    for (var item in items) {
+      var newItem = DropdownMenuItem(
+        child: Text('${item.category}'),
+        value: item.category,
+      );
+      dropdownItems.add(newItem);
+    }
+    return dropdownItems;
+  }
+
   CachedNetworkImage getCachedNetworkImage(
       {required String url, double? height, double? width}) {
     return CachedNetworkImage(

@@ -18,5 +18,29 @@
     {
         "category": "Forest",
         "image": "https://cdn-icons-png.flaticon.com/512/2321/2321573.png"
+    },
+    {
+        "category": "Bar",
+        "image": "https://cdn-icons-png.flaticon.com/512/3184/3184507.png"
+    },
+    {
+        "category": "Hotel",
+        "image": "https://cdn-icons-png.flaticon.com/512/1475/1475996.png"
+    },
+    {
+        "category": "Hospital",
+        "image": "https://cdn-icons-png.flaticon.com/512/3063/3063176.png"
+    },
+    {
+        "category": "park",
+        "image": "https://cdn-icons-png.flaticon.com/512/291/291445.png"
+    },
+    {
+        "category": "Cinema",
+        "image": "https://cdn-icons-png.flaticon.com/512/864/864797.png"
+    },
+    {
+        "category": "Office",
+        "image": "https://cdn-icons-png.flaticon.com/512/2200/2200480.png"
     }
 ]
