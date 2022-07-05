@@ -5,6 +5,8 @@ import 'package:ionicons/ionicons.dart';
 import 'package:tour/data/model/category_model.dart';
 import 'package:tour/data/model/place_model.dart';
 import 'package:tour/module/screens/menus/add_place.dart';
+import 'package:tour/module/screens/menus/category/all_category.dart';
+import 'package:tour/module/screens/menus/place/all_place_by_category.dart';
 import 'package:tour/module/screens/menus/single_place.dart';
 import 'package:tour/shared/theme/colors.dart';
 
@@ -226,41 +228,60 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
               const SizedBox(height: 25),
-              const Text(
-                'Categories',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Categories',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () => si.routerService.nextRoute(
+                      context,
+                      AllCategory(categories: categories),
+                    ),
+                    child: const Text('More...'),
+                  ),
+                ],
               ),
               const SizedBox(height: 15),
               SizedBox(
                 height: 110,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: categories.length,
+                  itemCount: categories.length > 5 ? 5 : categories.length,
                   itemBuilder: (context, index) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(15.0),
-                          margin: const EdgeInsets.only(right: 14.5),
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.cardColor,
+                    return GestureDetector(
+                      onTap: () => si.routerService.nextRoute(
+                        context,
+                        AllPlacesByCategory(
+                            category: categories[index].category),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(15.0),
+                            margin: const EdgeInsets.only(right: 14.5),
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColors.cardColor,
+                            ),
+                            child: Image.network(
+                              categories[index].image,
+                              height: 50,
+                            ),
                           ),
-                          child: Image.network(
-                            categories[index].image,
-                            height: 50,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          categories[index].category,
-                          style: const TextStyle(color: Colors.grey),
-                        )
-                      ],
+                          const SizedBox(height: 8),
+                          Text(
+                            categories[index].category,
+                            style: const TextStyle(color: Colors.grey),
+                          )
+                        ],
+                      ),
                     );
                   },
                 ),

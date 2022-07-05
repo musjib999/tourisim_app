@@ -7,12 +7,32 @@ class FirebaseService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
-  Future getAllDoc(String collection) async {
+  Future getAllDoc(String collection,
+      {String? filter, String? isEqualTo}) async {
     // List<QueryDocumentSnapshot<Map<String, dynamic>>>? documets;
     dynamic documents;
     try {
-      final docs =
-          await _firestore.collection(collection).orderBy('name').get();
+      final docs = await _firestore
+          .collection(collection)
+          // .where(filter!, isEqualTo: isEqualTo)
+          .orderBy('name')
+          .get();
+      documents = docs.docs;
+    } on FirebaseException catch (e) {
+      documents = e.message;
+    }
+    return documents;
+  }
+
+  Future getAllDocBy(String collection,
+      {required Object filter, Object? isEqualTo}) async {
+    // List<QueryDocumentSnapshot<Map<String, dynamic>>>? documets;
+    dynamic documents;
+    try {
+      final docs = await _firestore
+          .collection(collection)
+          .where(filter, isEqualTo: isEqualTo)
+          .get();
       documents = docs.docs;
     } on FirebaseException catch (e) {
       documents = e.message;

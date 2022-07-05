@@ -13,6 +13,7 @@ class PlacesService {
     required String imagePath,
     required String name,
     required String location,
+    required String category,
     required double lat,
     required double long,
     String description = '',
@@ -43,6 +44,7 @@ class PlacesService {
                     'longitude': long,
                     'latitude': lat,
                   },
+                  'category': category,
                   'description': description,
                   'id': uuid,
                 },
@@ -67,7 +69,8 @@ class PlacesService {
   }
 
   //fetch
-  Future<List<PlaceModel>> getAllPlaces() async {
+  Future<List<PlaceModel>> getAllPlaces(
+      {String? filter, String? isEqualTo}) async {
     List<PlaceModel> placesList = [];
     final places = await si.firebaseService.getAllDoc('places');
     if (places.runtimeType == String) {
@@ -77,6 +80,22 @@ class PlacesService {
         placesList.add(PlaceModel.fromJson(place.data()));
       }
     }
+    return placesList;
+  }
+
+  Future<List<PlaceModel>> getAllPlacesByCategory(
+      {required String category}) async {
+    List<PlaceModel> placesList = [];
+    final places = await si.firebaseService
+        .getAllDocBy('places', filter: 'category', isEqualTo: category);
+    if (places.runtimeType == String) {
+    } else {
+      for (final place
+          in places as List<QueryDocumentSnapshot<Map<String, dynamic>>>) {
+        placesList.add(PlaceModel.fromJson(place.data()));
+      }
+    }
+
     return placesList;
   }
 

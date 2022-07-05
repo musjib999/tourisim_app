@@ -20,8 +20,20 @@ class AddPlace extends StatefulWidget {
 class _AddPlaceState extends State<AddPlace> {
   TextEditingController name = TextEditingController();
   TextEditingController description = TextEditingController();
+  String selectedCategory = '';
+  List categories = [];
   double latitude = 0.0;
   double longitude = 0.0;
+  @override
+  void initState() {
+    super.initState();
+    si.utilityService.getAllCategories().then((value) {
+      setState(() {
+        categories = value;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -133,6 +145,19 @@ class _AddPlaceState extends State<AddPlace> {
                 ),
               ),
               const SizedBox(height: 15),
+              DropdownButtonFormField<dynamic>(
+                items: si.utilityService.getDropdownItems(categories),
+                onChanged: (value) {
+                  setState(() {
+                    selectedCategory = value;
+                  });
+                },
+                hint: const Text('Category'),
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 15),
               TextFormField(
                 controller: description,
                 decoration: const InputDecoration(
@@ -154,6 +179,7 @@ class _AddPlaceState extends State<AddPlace> {
                       name: name.text,
                       description: description.text,
                       location: cityAndCountry,
+                      category: selectedCategory,
                       lat: latitude,
                       long: longitude,
                     );

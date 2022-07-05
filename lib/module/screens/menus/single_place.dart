@@ -35,7 +35,7 @@ class _SinglePlaceState extends State<SinglePlace> {
                   child: si.utilityService.getCachedNetworkImage(
                     url: widget.place.image,
                     width: double.infinity,
-                    height: 400,
+                    height: 420,
                   ),
                 ),
                 Padding(
@@ -96,47 +96,86 @@ class _SinglePlaceState extends State<SinglePlace> {
                   ),
                   const SizedBox(height: 15),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const FadedBackgroundContainer(
-                        icon: Icon(
-                          Ionicons.heart,
-                          color: Colors.red,
-                          size: 25,
-                        ),
-                        shape: BoxShape.rectangle,
-                        size: 35,
-                      ),
-                      const SizedBox(width: 8),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      Row(
                         children: [
-                          const Text(
-                            'Likes',
-                            style: TextStyle(color: Colors.grey, fontSize: 12),
+                          const FadedBackgroundContainer(
+                            icon: Icon(
+                              Ionicons.heart,
+                              color: Colors.red,
+                              size: 25,
+                            ),
+                            shape: BoxShape.rectangle,
+                            size: 35,
                           ),
-                          StreamBuilder<QuerySnapshot<Object?>>(
-                            stream: si.firebaseService
-                                .getLikesStream(widget.place.id),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const Text(
-                                  '0',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                );
-                              }
-                              return Text(
-                                snapshot.data!.docs.length.toString(),
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
-                              );
-                            },
-                          ),
+                          const SizedBox(width: 8),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Likes',
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 12),
+                              ),
+                              StreamBuilder<QuerySnapshot<Object?>>(
+                                stream: si.firebaseService
+                                    .getLikesStream(widget.place.id),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const Text(
+                                      '0',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    );
+                                  }
+                                  return Text(
+                                    snapshot.data!.docs.length.toString(),
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),
+                                  );
+                                },
+                              ),
+                            ],
+                          )
                         ],
-                      )
+                      ),
+                      SizedBox(
+                        width: 120,
+                        child: Row(
+                          children: [
+                            const FadedBackgroundContainer(
+                              icon: Icon(
+                                Ionicons.grid_outline,
+                                color: Colors.green,
+                                size: 25,
+                              ),
+                              shape: BoxShape.rectangle,
+                              size: 35,
+                            ),
+                            const SizedBox(width: 8),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Category',
+                                  style: TextStyle(
+                                      color: Colors.grey, fontSize: 12),
+                                ),
+                                Text(
+                                  widget.place.category,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
                     ],
                   ),
-                  const SizedBox(height: 15.0),
+                  const SizedBox(height: 20.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -169,34 +208,37 @@ class _SinglePlaceState extends State<SinglePlace> {
                           )
                         ],
                       ),
-                      Row(
-                        children: [
-                          const FadedBackgroundContainer(
-                            icon: Icon(
-                              Ionicons.location_outline,
-                              color: Colors.blue,
-                              size: 25,
+                      SizedBox(
+                        width: 120,
+                        child: Row(
+                          children: [
+                            const FadedBackgroundContainer(
+                              icon: Icon(
+                                Ionicons.location_outline,
+                                color: Colors.blue,
+                                size: 25,
+                              ),
+                              shape: BoxShape.rectangle,
+                              size: 35,
                             ),
-                            shape: BoxShape.rectangle,
-                            size: 35,
-                          ),
-                          const SizedBox(width: 8),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'Longitude',
-                                style:
-                                    TextStyle(color: Colors.grey, fontSize: 12),
-                              ),
-                              Text(
-                                widget.place.position.longitude.toString(),
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          )
-                        ],
+                            const SizedBox(width: 8),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Longitude',
+                                  style: TextStyle(
+                                      color: Colors.grey, fontSize: 12),
+                                ),
+                                Text(
+                                  widget.place.position.longitude.toString(),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
                       ),
                     ],
                   ),
